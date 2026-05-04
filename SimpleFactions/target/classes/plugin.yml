@@ -1,0 +1,17 @@
+name: SimpleFactions
+version: 1.0.0
+main: com.convariance.sf.SimpleFactionsPlugin
+api-version: "1.20"
+
+author: Convariance
+
+commands:
+  faction:
+    description: Factions command
+    usage: /faction
+    aliases: [f, fac]
+
+permissions:
+  simplefactions.admin:
+    description: Admin permissions for SimpleFactions
+    default: op

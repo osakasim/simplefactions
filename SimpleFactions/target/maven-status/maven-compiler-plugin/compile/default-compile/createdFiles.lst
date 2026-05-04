@@ -1,0 +1,6 @@
+com\convariance\sf\FactionCommand.class
+com\convariance\sf\WarManager.class
+com\convariance\sf\ExplosionProtectionListener.class
+com\convariance\sf\ClaimBorderListener.class
+com\convariance\sf\SimpleFactionsPlugin.class
+com\convariance\sf\ClaimProtectionListener.class

@@ -1,0 +1,9 @@
+factions:
+  test:
+    owner: "UUID-HERE"
+    members:
+      - "UUID-HERE"
+
+claims: {}
+
+wars: {}

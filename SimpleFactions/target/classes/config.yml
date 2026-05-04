@@ -1,0 +1,14 @@
+# How many chunks each faction member adds to the claim limit
+chunksPerMember: 10
+
+# Minimum distance (in CHUNKS) from world spawn required to claim land
+# 100 chunks ≈ 1600 blocks
+minClaimDistanceFromSpawnChunks: 100
+
+war:
+  allowExplosionsInEnemyClaims: true
+  allowFireSpreadInEnemyClaims: false
+
+messages:
+  actionbarDeny: "&cYou cannot do that in &f{faction}&c territory."
+  actionbarWar: "&6WAR: &eGrief allowed here (war active vs {faction})."
