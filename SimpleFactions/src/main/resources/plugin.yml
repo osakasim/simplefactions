@@ -1,14 +1,14 @@
 name: SimpleFactions
 version: 1.0.0
 main: com.convariance.sf.SimpleFactionsPlugin
-api-version: "1.20"
+api-version: "1.21"
 
 author: Convariance
 
 commands:
   faction:
     description: Factions command
-    usage: /faction
+    usage: /faction help
     aliases: [f, fac]
 
 permissions:

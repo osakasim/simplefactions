@@ -51,12 +51,18 @@ public class ClaimProtectionListener implements Listener {
             return;
         }
 
-        // Same faction → allow
+        // Same faction -> allow
         if (playerFaction != null && playerFaction.equals(owningFaction)) {
             return;
         }
 
-        // War check → allow grief
+        // Trusted players -> allow
+        if (factions.getStringList("factions." + owningFaction + ".trusted")
+                .contains(player.getUniqueId().toString())) {
+            return;
+        }
+
+        // War check -> allow grief
         if (playerFaction != null && warManager.isAtWar(playerFaction, owningFaction)) {
             return;
         }
