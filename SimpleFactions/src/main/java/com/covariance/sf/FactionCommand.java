@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class FactionCommand implements CommandExecutor {
-
     private final SimpleFactionsPlugin plugin;
     private final WarManager warManager;
     private final Map<UUID, String> invites = new HashMap<>();
@@ -23,7 +22,6 @@ public class FactionCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Players only.");
             return true;
@@ -32,399 +30,128 @@ public class FactionCommand implements CommandExecutor {
         FileConfiguration factions = plugin.getFactionsConfig();
         UUID uuid = player.getUniqueId();
 
-        if (args.length == 0) {
-            player.sendMessage("§cUsage: /f create|invite|accept|leave|kick|disband|claim|war|map");
+        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+            sendHelp(player);
             return true;
         }
 
-        /* ================= MAP ================= */
-        if (args[0].equalsIgnoreCase("map")) {
-            showMap(player, factions);
-            return true;
+        switch (args[0].toLowerCase(Locale.ROOT)) {
+            case "menu" -> showMenuStub(player);
+            case "map" -> showMap(player, factions);
+            case "list" -> listFactions(player, factions);
+            case "info" -> showInfo(player, factions, args);
+            case "trust" -> trust(player, factions, uuid, args);
+            case "untrust" -> untrust(player, factions, uuid, args);
+            case "create" -> createFaction(player, factions, uuid, args);
+            case "invite" -> invite(player, factions, uuid, args);
+            case "accept" -> accept(player, factions, uuid);
+            case "leave" -> leave(player, factions, uuid);
+            case "kick" -> kick(player, factions, uuid, args);
+            case "disband" -> disband(player, factions, uuid);
+            case "claim" -> claim(player, factions, uuid);
+            case "unclaim" -> unclaim(player, factions, uuid);
+            case "war" -> war(player, factions, uuid, args);
+            case "ally" -> ally(player, factions, uuid, args);
+            case "neutral" -> neutral(player, factions, uuid, args);
+            default -> player.sendMessage("§cUnknown subcommand. Use /f help");
         }
-
-        /* ================= CREATE ================= */
-        if (args[0].equalsIgnoreCase("create")) {
-            if (args.length < 2) {
-                player.sendMessage("§cUsage: /f create <name>");
-                return true;
-            }
-
-            if (getPlayerFaction(uuid, factions) != null) {
-                player.sendMessage("§cYou are already in a faction.");
-                return true;
-            }
-
-            String name = args[1];
-
-            if (factions.contains("factions." + name)) {
-                player.sendMessage("§cThat faction already exists.");
-                return true;
-            }
-
-            factions.set("factions." + name + ".owner", uuid.toString());
-            factions.set("factions." + name + ".members",
-                    new ArrayList<>(List.of(uuid.toString())));
-            plugin.saveFactionsFile();
-
-            player.sendMessage("§aFaction " + name + " created!");
-            return true;
-        }
-
-        /* ================= INVITE ================= */
-        if (args[0].equalsIgnoreCase("invite")) {
-            if (args.length < 2) {
-                player.sendMessage("§cUsage: /f invite <player>");
-                return true;
-            }
-
-            String faction = getPlayerFaction(uuid, factions);
-            if (faction == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            if (!uuid.toString().equals(
-                    factions.getString("factions." + faction + ".owner"))) {
-                player.sendMessage("§cOnly the owner can invite.");
-                return true;
-            }
-
-            Player target = Bukkit.getPlayer(args[1]);
-            if (target == null) {
-                player.sendMessage("§cPlayer not found.");
-                return true;
-            }
-
-            if (target.getUniqueId().equals(uuid)) {
-                player.sendMessage("§cYou cannot invite yourself.");
-                return true;
-            }
-
-            invites.put(target.getUniqueId(), faction);
-            target.sendMessage("§eYou have been invited to join §a" + faction);
-            target.sendMessage("§7Type §f/f accept §7to join.");
-            player.sendMessage("§aInvite sent.");
-            return true;
-        }
-
-        /* ================= ACCEPT ================= */
-        if (args[0].equalsIgnoreCase("accept")) {
-            if (!invites.containsKey(uuid)) {
-                player.sendMessage("§cYou have no invites.");
-                return true;
-            }
-
-            if (getPlayerFaction(uuid, factions) != null) {
-                player.sendMessage("§cYou are already in a faction.");
-                return true;
-            }
-
-            String faction = invites.remove(uuid);
-            List<String> members =
-                    factions.getStringList("factions." + faction + ".members");
-            members.add(uuid.toString());
-            factions.set("factions." + faction + ".members", members);
-            plugin.saveFactionsFile();
-
-            player.sendMessage("§aYou joined faction " + faction + "!");
-            return true;
-        }
-
-        /* ================= LEAVE ================= */
-        if (args[0].equalsIgnoreCase("leave")) {
-            String faction = getPlayerFaction(uuid, factions);
-            if (faction == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            String owner = factions.getString("factions." + faction + ".owner");
-            if (uuid.toString().equals(owner)) {
-                player.sendMessage("§cOwner must disband the faction.");
-                return true;
-            }
-
-            List<String> members = factions.getStringList("factions." + faction + ".members");
-            members.remove(uuid.toString());
-            factions.set("factions." + faction + ".members", members);
-            plugin.saveFactionsFile();
-
-            player.sendMessage("§aYou left faction " + faction + ".");
-            return true;
-        }
-
-        /* ================= KICK ================= */
-        if (args[0].equalsIgnoreCase("kick")) {
-            if (args.length < 2) {
-                player.sendMessage("§cUsage: /f kick <player>");
-                return true;
-            }
-
-            String faction = getPlayerFaction(uuid, factions);
-            if (faction == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            if (!uuid.toString().equals(
-                    factions.getString("factions." + faction + ".owner"))) {
-                player.sendMessage("§cOnly the owner can kick.");
-                return true;
-            }
-
-            Player target = Bukkit.getPlayer(args[1]);
-            if (target == null) {
-                player.sendMessage("§cPlayer not found.");
-                return true;
-            }
-
-            if (target.getUniqueId().equals(uuid)) {
-                player.sendMessage("§cYou cannot kick yourself.");
-                return true;
-            }
-
-            List<String> members = factions.getStringList("factions." + faction + ".members");
-            if (!members.remove(target.getUniqueId().toString())) {
-                player.sendMessage("§cThat player is not in your faction.");
-                return true;
-            }
-
-            factions.set("factions." + faction + ".members", members);
-            plugin.saveFactionsFile();
-
-            player.sendMessage("§aPlayer kicked.");
-            target.sendMessage("§cYou were kicked from faction " + faction + ".");
-            return true;
-        }
-
-        /* ================= DISBAND ================= */
-        if (args[0].equalsIgnoreCase("disband")) {
-            String faction = getPlayerFaction(uuid, factions);
-            if (faction == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            if (!uuid.toString().equals(
-                    factions.getString("factions." + faction + ".owner"))) {
-                player.sendMessage("§cOnly the owner can disband.");
-                return true;
-            }
-
-            removeFactionClaims(faction, factions);
-            factions.set("factions." + faction, null);
-            factions.set("wars." + faction, null);
-            plugin.saveFactionsFile();
-
-            Bukkit.broadcastMessage("§cFaction §4" + faction + " §chas been disbanded!");
-            return true;
-        }
-
-        /* ================= CLAIM ================= */
-        if (args[0].equalsIgnoreCase("claim")) {
-            String faction = getPlayerFaction(uuid, factions);
-            if (faction == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            Chunk chunk = player.getLocation().getChunk();
-            String world = chunk.getWorld().getName();
-            String key = chunk.getX() + "," + chunk.getZ();
-			
-			// ---- SPAWN DISTANCE CHECK (30 chunks) ----
-Chunk spawnChunk = player.getWorld().getSpawnLocation().getChunk();
-
-int dx = Math.abs(chunk.getX() - spawnChunk.getX());
-int dz = Math.abs(chunk.getZ() - spawnChunk.getZ());
-
-if (dx < 30 && dz < 30) {
-    player.sendMessage("§cYou cannot claim within §e30 chunks §cof spawn.");
-    return true;
-}
-
-
-            if (factions.contains("claims." + world + "." + key)) {
-                player.sendMessage("§cThis chunk is already claimed.");
-                return true;
-            }
-
-            int members = factions.getStringList("factions." + faction + ".members").size();
-            int maxClaims = members * 10;
-            int currentClaims = getFactionClaimCount(faction, factions);
-
-            if (currentClaims >= maxClaims) {
-                player.sendMessage("§cClaim limit reached (§e" +
-                        currentClaims + "/" + maxClaims + "§c).");
-                return true;
-            }
-
-            factions.set("claims." + world + "." + key, faction);
-            plugin.saveFactionsFile();
-
-            player.sendMessage("§aChunk claimed (§e" +
-                    (currentClaims + 1) + "/" + maxClaims + "§a)");
-            return true;
-        }
-
-/* ================= UNCLAIM ================= */
-if (args[0].equalsIgnoreCase("unclaim")) {
-
-    String faction = getPlayerFaction(uuid, factions);
-    if (faction == null) {
-        player.sendMessage("§cYou are not in a faction.");
         return true;
     }
 
-    // Owner-only (logical)
-    if (!uuid.toString().equals(
-            factions.getString("factions." + faction + ".owner"))) {
-        player.sendMessage("§cOnly the faction owner can unclaim land.");
-        return true;
+    private void sendHelp(Player p) {
+        p.sendMessage("§6/f help, menu, map, list, info <faction>");
+        p.sendMessage("§6/f create, invite, accept, leave, kick, disband");
+        p.sendMessage("§6/f claim, unclaim, trust <player>, untrust <player>");
+        p.sendMessage("§6/f war <faction>, ally <faction>, neutral <faction>");
     }
 
-    Chunk chunk = player.getLocation().getChunk();
-    String world = chunk.getWorld().getName();
-    String key = chunk.getX() + "," + chunk.getZ();
-
-    if (!factions.contains("claims." + world + "." + key)) {
-        player.sendMessage("§cThis chunk is not claimed.");
-        return true;
+    private void showMenuStub(Player p) {
+        FactionMenuListener.openMainMenu(p);
     }
 
-    String ownerFaction = factions.getString("claims." + world + "." + key);
-    if (!faction.equals(ownerFaction)) {
-        player.sendMessage("§cYou do not own this chunk.");
-        return true;
+    private boolean isOwner(UUID uuid, String faction, FileConfiguration factions) {
+        return uuid.toString().equals(factions.getString("factions." + faction + ".owner"));
     }
 
-    factions.set("claims." + world + "." + key, null);
-    plugin.saveFactionsFile();
-
-    player.sendMessage("§aChunk unclaimed.");
-    return true;
-}
-
-        /* ================= WAR ================= */
-        if (args[0].equalsIgnoreCase("war")) {
-            if (args.length < 2) {
-                player.sendMessage("§cUsage: /f war <faction>");
-                return true;
-            }
-
-            String attacker = getPlayerFaction(uuid, factions);
-            String defender = args[1];
-
-            if (attacker == null) {
-                player.sendMessage("§cYou are not in a faction.");
-                return true;
-            }
-
-            if (!factions.contains("factions." + defender)) {
-                player.sendMessage("§cFaction does not exist.");
-                return true;
-            }
-
-            if (attacker.equals(defender)) {
-                player.sendMessage("§cYou cannot declare war on yourself.");
-                return true;
-            }
-
-            if (!uuid.toString().equals(
-                    factions.getString("factions." + attacker + ".owner"))) {
-                player.sendMessage("§cOnly the owner can declare war.");
-                return true;
-            }
-
-            if (warManager.isAtWar(attacker, defender)) {
-                player.sendMessage("§cAlready at war.");
-                return true;
-            }
-
-            warManager.declareWar(attacker, defender);
-            player.sendMessage("§cWar declared on §4" + defender);
-            return true;
-        }
-
-        player.sendMessage("§cUnknown command.");
-        return true;
+    private boolean isTrusted(String faction, UUID uuid, FileConfiguration factions) {
+        return factions.getStringList("factions." + faction + ".trusted").contains(uuid.toString());
     }
 
-    /* ================= HELPERS ================= */
-
-    private String getPlayerFaction(UUID uuid, FileConfiguration factions) {
-        if (!factions.contains("factions")) return null;
-        for (String faction : factions.getConfigurationSection("factions").getKeys(false)) {
-            if (factions.getStringList(
-                    "factions." + faction + ".members").contains(uuid.toString())) {
-                return faction;
-            }
-        }
-        return null;
+    private void trust(Player player, FileConfiguration factions, UUID uuid, String[] args) {
+        if (args.length < 2) { player.sendMessage("§cUsage: /f trust <player>"); return; }
+        String faction = getPlayerFaction(uuid, factions);
+        if (faction == null || !isOwner(uuid, faction, factions)) { player.sendMessage("§cOwner only."); return; }
+        Player target = Bukkit.getPlayer(args[1]);
+        if (target == null) { player.sendMessage("§cPlayer not found."); return; }
+        List<String> trusted = factions.getStringList("factions." + faction + ".trusted");
+        if (!trusted.contains(target.getUniqueId().toString())) trusted.add(target.getUniqueId().toString());
+        factions.set("factions." + faction + ".trusted", trusted);
+        plugin.saveFactionsFile();
+        player.sendMessage("§aTrusted: " + target.getName());
     }
 
-    private int getFactionClaimCount(String faction, FileConfiguration factions) {
-        if (!factions.contains("claims")) return 0;
-
-        int count = 0;
-        for (String world : factions.getConfigurationSection("claims").getKeys(false)) {
-            for (String key : factions.getConfigurationSection("claims." + world).getKeys(false)) {
-                if (faction.equals(factions.getString("claims." + world + "." + key))) {
-                    count++;
-                }
-            }
-        }
-        return count;
+    private void untrust(Player player, FileConfiguration factions, UUID uuid, String[] args) {
+        if (args.length < 2) { player.sendMessage("§cUsage: /f untrust <player>"); return; }
+        String faction = getPlayerFaction(uuid, factions);
+        if (faction == null || !isOwner(uuid, faction, factions)) { player.sendMessage("§cOwner only."); return; }
+        Player target = Bukkit.getPlayer(args[1]);
+        if (target == null) { player.sendMessage("§cPlayer not found."); return; }
+        List<String> trusted = factions.getStringList("factions." + faction + ".trusted");
+        trusted.remove(target.getUniqueId().toString());
+        factions.set("factions." + faction + ".trusted", trusted);
+        plugin.saveFactionsFile();
+        player.sendMessage("§eRemoved trust: " + target.getName());
     }
 
-    private void removeFactionClaims(String faction, FileConfiguration factions) {
-        if (!factions.contains("claims")) return;
-
-        for (String world : factions.getConfigurationSection("claims").getKeys(false)) {
-            for (String key :
-                    new ArrayList<>(factions.getConfigurationSection("claims." + world).getKeys(false))) {
-                if (faction.equals(factions.getString("claims." + world + "." + key))) {
-                    factions.set("claims." + world + "." + key, null);
-                }
-            }
-        }
+    private void createFaction(Player player, FileConfiguration factions, UUID uuid, String[] args) {
+        if (args.length < 2) { player.sendMessage("§cUsage: /f create <name>"); return; }
+        if (getPlayerFaction(uuid, factions) != null) { player.sendMessage("§cYou are already in a faction."); return; }
+        String name = args[1];
+        if (factions.contains("factions." + name)) { player.sendMessage("§cThat faction already exists."); return; }
+        factions.set("factions." + name + ".owner", uuid.toString());
+        factions.set("factions." + name + ".members", new ArrayList<>(List.of(uuid.toString())));
+        factions.set("factions." + name + ".trusted", new ArrayList<>());
+        plugin.saveFactionsFile();
+        player.sendMessage("§aFaction " + name + " created!");
     }
+
+    private void invite(Player player, FileConfiguration factions, UUID uuid, String[] args) { if (args.length<2) return; String faction=getPlayerFaction(uuid,factions); if (faction==null||!isOwner(uuid,faction,factions)) return; Player t=Bukkit.getPlayer(args[1]); if (t==null||t.getUniqueId().equals(uuid)) return; invites.put(t.getUniqueId(),faction); t.sendMessage("§eInvited to §a"+faction+"§e. /f accept"); player.sendMessage("§aInvite sent."); }
+    private void accept(Player player, FileConfiguration factions, UUID uuid) { if (!invites.containsKey(uuid)||getPlayerFaction(uuid,factions)!=null) return; String faction=invites.remove(uuid); List<String> m=factions.getStringList("factions."+faction+".members"); m.add(uuid.toString()); factions.set("factions."+faction+".members",m); plugin.saveFactionsFile(); player.sendMessage("§aJoined "+faction); }
+    private void leave(Player player, FileConfiguration factions, UUID uuid) { String faction=getPlayerFaction(uuid,factions); if (faction==null||isOwner(uuid,faction,factions)) return; List<String> m=factions.getStringList("factions."+faction+".members"); m.remove(uuid.toString()); factions.set("factions."+faction+".members",m); plugin.saveFactionsFile(); player.sendMessage("§aLeft faction."); }
+    private void kick(Player player, FileConfiguration factions, UUID uuid, String[] args) { if (args.length<2) return; String faction=getPlayerFaction(uuid,factions); if (faction==null||!isOwner(uuid,faction,factions)) return; Player t=Bukkit.getPlayer(args[1]); if (t==null||t.getUniqueId().equals(uuid)) return; List<String> m=factions.getStringList("factions."+faction+".members"); if (m.remove(t.getUniqueId().toString())) { factions.set("factions."+faction+".members",m); plugin.saveFactionsFile(); player.sendMessage("§aKicked."); } }
+    private void disband(Player player, FileConfiguration factions, UUID uuid) { String faction=getPlayerFaction(uuid,factions); if (faction==null||!isOwner(uuid,faction,factions)) return; removeFactionClaims(faction,factions); factions.set("factions."+faction,null); factions.set("wars."+faction,null); factions.set("relations.allies."+faction,null); plugin.saveFactionsFile(); Bukkit.broadcastMessage("§cFaction disbanded: §4"+faction); }
+
+    private void claim(Player player, FileConfiguration factions, UUID uuid) {
+        String faction = getPlayerFaction(uuid, factions); if (faction == null) return;
+        Chunk chunk = player.getLocation().getChunk(); String world = chunk.getWorld().getName(); String key = chunk.getX()+","+chunk.getZ();
+        int minDist = plugin.getConfig().getInt("minClaimDistanceFromSpawnChunks", 30);
+        Chunk spawnChunk = player.getWorld().getSpawnLocation().getChunk();
+        int dx=Math.abs(chunk.getX()-spawnChunk.getX()), dz=Math.abs(chunk.getZ()-spawnChunk.getZ());
+        if (dx < minDist && dz < minDist) { player.sendMessage("§cToo close to spawn."); return; }
+        if (factions.contains("claims."+world+"."+key)) return;
+        int members=factions.getStringList("factions."+faction+".members").size();
+        int maxClaims=members*plugin.getConfig().getInt("chunksPerMember",10);
+        int currentClaims=getFactionClaimCount(faction,factions);
+        if (currentClaims>=maxClaims) return;
+        factions.set("claims."+world+"."+key,faction); plugin.saveFactionsFile(); player.sendMessage("§aClaimed.");
+    }
+
+    private void unclaim(Player player, FileConfiguration factions, UUID uuid) { String faction=getPlayerFaction(uuid,factions); if (faction==null||!isOwner(uuid,faction,factions)) return; Chunk c=player.getLocation().getChunk(); String w=c.getWorld().getName(); String key=c.getX()+","+c.getZ(); if (faction.equals(factions.getString("claims."+w+"."+key))) { factions.set("claims."+w+"."+key,null); plugin.saveFactionsFile(); player.sendMessage("§aUnclaimed."); } }
+    private void war(Player p, FileConfiguration factions, UUID uuid, String[] args){ if(args.length<2)return; String a=getPlayerFaction(uuid,factions), d=args[1]; if(a==null||!factions.contains("factions."+d)||a.equals(d)||!isOwner(uuid,a,factions)) return; warManager.declareWar(a,d); p.sendMessage("§cWar declared on "+d);}    
+    private void ally(Player p, FileConfiguration factions, UUID uuid, String[] args){ if(args.length<2)return; String a=getPlayerFaction(uuid,factions), b=args[1]; if(a==null||!factions.contains("factions."+b)||a.equals(b)||!isOwner(uuid,a,factions)) return; warManager.ally(a,b); p.sendMessage("§aAlliance formed with "+b);}    
+    private void neutral(Player p, FileConfiguration factions, UUID uuid, String[] args){ if(args.length<2)return; String a=getPlayerFaction(uuid,factions), b=args[1]; if(a==null||!factions.contains("factions."+b)||a.equals(b)||!isOwner(uuid,a,factions)) return; warManager.neutral(a,b); p.sendMessage("§eRelation set to neutral with "+b);}    
+
+    private void listFactions(Player p, FileConfiguration f){ if(!f.contains("factions")){p.sendMessage("§7No factions.");return;} p.sendMessage("§6Factions: §f"+String.join(", ",f.getConfigurationSection("factions").getKeys(false))); }
+    private void showInfo(Player p, FileConfiguration f, String[] args){ if(args.length<2){p.sendMessage("§cUsage: /f info <faction>");return;} String fac=args[1]; if(!f.contains("factions."+fac)){p.sendMessage("§cNot found.");return;} int members=f.getStringList("factions."+fac+".members").size(); int claims=getFactionClaimCount(fac,f); int trusted=f.getStringList("factions."+fac+".trusted").size(); p.sendMessage("§6"+fac+" §7Members: §f"+members+" §7Trusted: §f"+trusted+" §7Claims: §f"+claims); }
+
+    private String getPlayerFaction(UUID uuid, FileConfiguration factions) { if (!factions.contains("factions")) return null; for (String faction : factions.getConfigurationSection("factions").getKeys(false)) { if (factions.getStringList("factions." + faction + ".members").contains(uuid.toString())) return faction; } return null; }
+    private int getFactionClaimCount(String faction, FileConfiguration factions) { if (!factions.contains("claims")) return 0; int c=0; for (String w: factions.getConfigurationSection("claims").getKeys(false)) for (String k: factions.getConfigurationSection("claims."+w).getKeys(false)) if (faction.equals(factions.getString("claims."+w+"."+k))) c++; return c; }
+    private void removeFactionClaims(String faction, FileConfiguration factions) { if (!factions.contains("claims")) return; for (String w: factions.getConfigurationSection("claims").getKeys(false)) for (String k: new ArrayList<>(factions.getConfigurationSection("claims."+w).getKeys(false))) if (faction.equals(factions.getString("claims."+w+"."+k))) factions.set("claims."+w+"."+k,null); }
 
     private void showMap(Player player, FileConfiguration factions) {
-        Chunk center = player.getLocation().getChunk();
-        String world = player.getWorld().getName();
-        String playerFaction = getPlayerFaction(player.getUniqueId(), factions);
-
+        Chunk center = player.getLocation().getChunk(); String world = player.getWorld().getName(); String pf = getPlayerFaction(player.getUniqueId(), factions);
         player.sendMessage("§6=== Faction Map ===");
-
-        for (int z = 4; z >= -4; z--) {
-            StringBuilder line = new StringBuilder();
-            for (int x = -4; x <= 4; x++) {
-                int cx = center.getX() + x;
-                int cz = center.getZ() + z;
-                String key = cx + "," + cz;
-
-                if (x == 0 && z == 0) {
-                    line.append("§e✦ ");
-                    continue;
-                }
-
-                String owner = factions.getString("claims." + world + "." + key);
-                if (owner == null) {
-                    line.append("§7■ ");
-                } else if (owner.equals(playerFaction)) {
-                    line.append("§a■ ");
-                } else {
-                    line.append("§c■ ");
-                }
-            }
-            player.sendMessage(line.toString());
-        }
-
-        player.sendMessage("§7■ Wilderness  §a■ Yours  §c■ Enemy  §e✦ You");
+        for (int z=4; z>=-4; z--) { StringBuilder line=new StringBuilder(); for (int x=-4; x<=4; x++) { int cx=center.getX()+x, cz=center.getZ()+z; String key=cx+","+cz; if (x==0&&z==0){line.append("§e✦ ");continue;} String owner=factions.getString("claims."+world+"."+key); if(owner==null) line.append("§7■ "); else if(owner.equals(pf)) line.append("§a■ "); else if(warManager.isAlly(pf, owner)) line.append("§b■ "); else if(warManager.isAtWar(pf, owner)) line.append("§4■ "); else line.append("§c■ "); } player.sendMessage(line.toString()); }
+        player.sendMessage("§7■ Wild  §a■ Yours  §b■ Ally §c■ Other §4■ War §e✦ You");
     }
 }
-
-
-//als adam grub und eva spann, vo war denn da der edelmann?

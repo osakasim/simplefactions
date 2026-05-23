@@ -13,7 +13,8 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
 
         warManager = new WarManager(this);
 
-        getCommand("f").setExecutor(new FactionCommand(this, warManager));
+        java.util.Objects.requireNonNull(getCommand("faction"), "Command 'faction' not defined in plugin.yml")
+                .setExecutor(new FactionCommand(this, warManager));
 
         getServer().getPluginManager().registerEvents(
                 new ClaimProtectionListener(this, warManager), this
@@ -23,6 +24,9 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
         );
         getServer().getPluginManager().registerEvents(
                 new ExplosionProtectionListener(this, warManager), this
+        );
+        getServer().getPluginManager().registerEvents(
+                new FactionMenuListener(this), this
         );
 
         getLogger().info("SimpleFactions enabled.");

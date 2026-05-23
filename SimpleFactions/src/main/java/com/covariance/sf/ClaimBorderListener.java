@@ -39,6 +39,8 @@ public class ClaimBorderListener implements Listener {
             msg = ChatColor.GRAY + "Wilderness";
         } else if (owner.equals(playerFaction)) {
             msg = ChatColor.GREEN + "Your Territory";
+        } else if (playerFaction != null && warManager.isAlly(playerFaction, owner)) {
+            msg = ChatColor.AQUA + "Ally Territory";
         } else if (playerFaction != null && warManager.isAtWar(playerFaction, owner)) {
             msg = ChatColor.DARK_RED + "Enemy Territory (WAR)";
         } else {
