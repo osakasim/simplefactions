@@ -1,0 +1,69 @@
+messages:
+  playersOnly: "§cNur ludantoj povas uzi ĉi tiun komandon."
+  unknownSubcommand: "§cNekonata subkomando. Uzu /f help"
+
+  help:
+    line1: "§6/f help, menu, map, list, info <frakcio>"
+    line2: "§6/f create, invite, accept, leave, kick, disband"
+    line3: "§6/f claim, unclaim, trust <ludanto>, untrust <ludanto>"
+    line4: "§6/f war <frakcio>, ally <frakcio>, neutral <frakcio>"
+
+  usage:
+    trust: "§cUzo: /f trust <ludanto>"
+    untrust: "§cUzo: /f untrust <ludanto>"
+    create: "§cUzo: /f create <nomo>"
+    info: "§cUzo: /f info <frakcio>"
+
+  faction:
+    ownerOnly: "§cNur la posedanto povas fari tion."
+    playerNotFound: "§cLudanto ne trovita."
+    alreadyInFaction: "§cVi jam estas en frakcio."
+    alreadyExists: "§cTiu frakcio jam ekzistas."
+    created: "§aFrakcio {faction} kreita!"
+    trusted: "§aFidinda ludanto aldonita: {player}"
+    trustRemoved: "§eFido forigita: {player}"
+    invited: "§eVi estas invitita al frakcio §a{faction}§e. /f accept"
+    inviteSent: "§aInvito sendita."
+    joined: "§aVi aliĝis al {faction}"
+    left: "§aVi forlasis la frakcion."
+    kicked: "§aLudanto elpelita."
+    disbandedBroadcast: "§cFrakcio malfondita: §4{faction}"
+
+  claims:
+    tooCloseToSpawn: "§cTro proksime al la spawn-punkto."
+    claimed: "§aTeritorio postulate."
+    unclaimed: "§aTeritorio liberigita."
+    noFactions: "§7Neniuj frakcioj."
+
+  relations:
+    warDeclared: "§cVi deklaris militon kontraŭ frakcio {faction}."
+    allianceFormed: "§aAlianco formita kun {faction}"
+    setNeutral: "§eRilato kun {faction} agordita al neŭtrala"
+
+  list:
+    header: "§6Frakcioj: §f{factions}"
+
+  info:
+    notFound: "§cNe trovita."
+    summary: "§6{faction} §7Membroj: §f{members} §7Fidindaj: §f{trusted} §7Teritorioj: §f{claims}"
+
+  map:
+    title: "§6=== Frakcia mapo ==="
+    legend: "§7■ Sovaĝejo  §a■ Via  §b■ Aliancano §c■ Alia §4■ Milito §e✦ Vi"
+
+  menu:
+    mainTitle: "SimpleFactions Menuo"
+    inviteTitle: "Elektu ludanton por inviti"
+    trustTitle: "Elektu fidindan ludanton"
+    warTitle: "Elektu militcelon"
+    factionListItem: "§bFrakcia listo"
+    factionListLore: "§7Vidi ĉiujn frakciojn"
+
+  actionbar:
+    deny: "§cVi ne povas fari tion en teritorio de §f{faction}§c."
+    war: "§6MILITO: §eDetruado estas permesita ĉi tie (aktiva milito kontraŭ {faction})."
+    territoryWilderness: "§7Sovaĝejo"
+    territoryOwn: "§aVia teritorio"
+    territoryAlly: "§bAlianca teritorio"
+    territoryEnemy: "§cMalamika teritorio"
+    territoryEnemyWar: "§4Malamika teritorio (MILITO)"

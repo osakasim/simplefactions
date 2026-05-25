@@ -10,6 +10,7 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         setupFactionsFile();
+        setupMessagesFile();
 
         warManager = new WarManager(this);
 
@@ -41,6 +42,7 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
 
     private java.io.File factionsFile;
     private org.bukkit.configuration.file.FileConfiguration factionsConfig;
+    private org.bukkit.configuration.file.FileConfiguration messagesConfig;
 
     private void setupFactionsFile() {
         factionsFile = new java.io.File(getDataFolder(), "factions.yml");
@@ -54,6 +56,10 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
         return factionsConfig;
     }
 
+    public org.bukkit.configuration.file.FileConfiguration getMessagesConfig() {
+        return messagesConfig;
+    }
+
     public void saveFactionsFile() {
         try {
             factionsConfig.save(factionsFile);
@@ -61,6 +67,28 @@ public final class SimpleFactionsPlugin extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    private void setupMessagesFile() {
+        String language = getConfig().getString("language", "en").toLowerCase(java.util.Locale.ROOT);
+        String resourceName = switch (language) {
+            case "hu" -> "messages_hu.yml";
+            case "ru" -> "messages_ru.yml";
+            case "es" -> "messages_es.yml";
+            case "de" -> "messages_de.yml";
+            case "fr" -> "messages_fr.yml";
+            case "eo" -> "messages_eo.yml";
+            default -> "messages_en.yml";
+        };
+
+        java.io.File messagesFile = new java.io.File(getDataFolder(), "messages.yml");
+        if (!messagesFile.exists()) {
+            saveResource(resourceName, false);
+            java.io.File copied = new java.io.File(getDataFolder(), resourceName);
+            if (copied.exists() && !copied.renameTo(messagesFile)) {
+                getLogger().warning("Could not rename " + resourceName + " to messages.yml");
+            }
+        }
+        messagesConfig = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(messagesFile);
+    }
 }
 
-// im not even an american fascist why do i put myself through this? i wasnt even born here. im hungarian.

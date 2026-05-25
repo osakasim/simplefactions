@@ -1,0 +1,69 @@
+messages:
+  playersOnly: "§cЭту команду могут использовать только игроки."
+  unknownSubcommand: "§cНеизвестная подкоманда. Используйте /f help"
+
+  help:
+    line1: "§6/f help, menu, map, list, info <фракция>"
+    line2: "§6/f create, invite, accept, leave, kick, disband"
+    line3: "§6/f claim, unclaim, trust <игрок>, untrust <игрок>"
+    line4: "§6/f war <фракция>, ally <фракция>, neutral <фракция>"
+
+  usage:
+    trust: "§cИспользование: /f trust <игрок>"
+    untrust: "§cИспользование: /f untrust <игрок>"
+    create: "§cИспользование: /f create <название>"
+    info: "§cИспользование: /f info <фракция>"
+
+  faction:
+    ownerOnly: "§cТолько владелец может это делать."
+    playerNotFound: "§cИгрок не найден."
+    alreadyInFaction: "§cВы уже состоите во фракции."
+    alreadyExists: "§cТакая фракция уже существует."
+    created: "§aФракция {faction} создана!"
+    trusted: "§aВыдано доверие: {player}"
+    trustRemoved: "§eДоверие снято: {player}"
+    invited: "§eВы приглашены во фракцию §a{faction}§e. /f accept"
+    inviteSent: "§aПриглашение отправлено."
+    joined: "§aВы вступили во фракцию {faction}"
+    left: "§aВы покинули фракцию."
+    kicked: "§aИгрок исключён."
+    disbandedBroadcast: "§cФракция расформирована: §4{faction}"
+
+  claims:
+    tooCloseToSpawn: "§cСлишком близко к спавну."
+    claimed: "§aТерритория захвачена."
+    unclaimed: "§aТерритория освобождена."
+    noFactions: "§7Фракций нет."
+
+  relations:
+    warDeclared: "§cВы объявили войну фракции {faction}."
+    allianceFormed: "§aСоюз заключён с фракцией {faction}"
+    setNeutral: "§eОтношения с {faction} установлены как нейтральные"
+
+  list:
+    header: "§6Фракции: §f{factions}"
+
+  info:
+    notFound: "§cНе найдено."
+    summary: "§6{faction} §7Участников: §f{members} §7Доверенных: §f{trusted} §7Территорий: §f{claims}"
+
+  map:
+    title: "§6=== Карта фракций ==="
+    legend: "§7■ Пустошь  §a■ Ваша  §b■ Союзник §c■ Чужая §4■ Война §e✦ Вы"
+
+  menu:
+    mainTitle: "Меню SimpleFactions"
+    inviteTitle: "Выберите игрока для приглашения"
+    trustTitle: "Выберите игрока для доверия"
+    warTitle: "Выберите цель для войны"
+    factionListItem: "§bСписок фракций"
+    factionListLore: "§7Показать все фракции"
+
+  actionbar:
+    deny: "§cВы не можете делать это на территории §f{faction}§c."
+    war: "§6ВОЙНА: §eЗдесь разрешён гриф (активная война против {faction})."
+    territoryWilderness: "§7Пустошь"
+    territoryOwn: "§aВаша территория"
+    territoryAlly: "§bТерритория союзника"
+    territoryEnemy: "§cВражеская территория"
+    territoryEnemyWar: "§4Вражеская территория (ВОЙНА)"

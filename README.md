@@ -22,6 +22,7 @@ SimpleFactions is a lightweight factions plugin for Spigot/Paper servers (Minecr
 - GUI
   - `/f menu` opens a menu for common actions
   - Includes selectors for invite/trust/war targets
+- Language packs (templates) included: `messages_hu.yml` (Hungarian), `messages_ru.yml` (Russian), `messages_es.yml` (Spanish), `messages_de.yml` (German), `messages_fr.yml` (French), `messages_eo.yml` (Esperanto)
 
 ## Commands
 
@@ -59,6 +60,8 @@ Primary command aliases: `/faction`, `/f`, `/fac`
   - Number of claim chunks granted per faction member
 - `minClaimDistanceFromSpawnChunks`
   - Minimum chunk distance from spawn to claim
+- `language`
+  - Choose plugin message pack: `en`, `hu`, `ru`, `es`, `de`, `fr`, or `eo` (copied to `plugins/SimpleFactions/messages.yml` on first run)
 - `war.allowExplosionsInEnemyClaims`
 - `war.allowFireSpreadInEnemyClaims`
 

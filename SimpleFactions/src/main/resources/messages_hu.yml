@@ -1,0 +1,69 @@
+messages:
+  playersOnly: "§cCsak játékosok használhatják ezt a parancsot."
+  unknownSubcommand: "§cIsmeretlen alparancs. Használd: /f help"
+
+  help:
+    line1: "§6/f help, menu, map, list, info <frakció>"
+    line2: "§6/f create, invite, accept, leave, kick, disband"
+    line3: "§6/f claim, unclaim, trust <játékos>, untrust <játékos>"
+    line4: "§6/f war <frakció>, ally <frakció>, neutral <frakció>"
+
+  usage:
+    trust: "§cHasználat: /f trust <játékos>"
+    untrust: "§cHasználat: /f untrust <játékos>"
+    create: "§cHasználat: /f create <név>"
+    info: "§cHasználat: /f info <frakció>"
+
+  faction:
+    ownerOnly: "§cCsak a tulajdonos használhatja."
+    playerNotFound: "§cA játékos nem található."
+    alreadyInFaction: "§cMár benne vagy egy frakcióban."
+    alreadyExists: "§cEz a frakció már létezik."
+    created: "§aA(z) {faction} frakció létrehozva!"
+    trusted: "§aMegbízhatóként hozzáadva: {player}"
+    trustRemoved: "§eMegbízhatóság eltávolítva: {player}"
+    invited: "§eMeghívót kaptál a(z) §a{faction}§e frakcióba. /f accept"
+    inviteSent: "§aMeghívó elküldve."
+    joined: "§aBeléptél ide: {faction}"
+    left: "§aKiléptél a frakcióból."
+    kicked: "§aJátékos kirúgva."
+    disbandedBroadcast: "§cA frakció feloszlott: §4{faction}"
+
+  claims:
+    tooCloseToSpawn: "§cTúl közel vagy a spawnhoz."
+    claimed: "§aTerület lefoglalva."
+    unclaimed: "§aFoglalás megszüntetve."
+    noFactions: "§7Nincsenek frakciók."
+
+  relations:
+    warDeclared: "§cHáborút hirdettél a(z) {faction} frakció ellen."
+    allianceFormed: "§aSzövetség létrejött ezzel: {faction}"
+    setNeutral: "§eKapcsolat semlegesre állítva ezzel: {faction}"
+
+  list:
+    header: "§6Frakciók: §f{factions}"
+
+  info:
+    notFound: "§cNem található."
+    summary: "§6{faction} §7Tagok: §f{members} §7Megbízhatóak: §f{trusted} §7Foglalások: §f{claims}"
+
+  map:
+    title: "§6=== Frakció térkép ==="
+    legend: "§7■ Vadon  §a■ Tiéd  §b■ Szövetséges §c■ Másik §4■ Háború §e✦ Te"
+
+  menu:
+    mainTitle: "SimpleFactions Menü"
+    inviteTitle: "Válassz játékost meghíváshoz"
+    trustTitle: "Válassz játékost megbízhatónak"
+    warTitle: "Válassz háborús célpontot"
+    factionListItem: "§bFrakciólista"
+    factionListLore: "§7Összes frakció megtekintése"
+
+  actionbar:
+    deny: "§cNem teheted ezt a(z) §f{faction}§c területén."
+    war: "§6HÁBORÚ: §eItt engedélyezett a rombolás (aktív háború: {faction})."
+    territoryWilderness: "§7Vadon"
+    territoryOwn: "§aSaját terület"
+    territoryAlly: "§bSzövetséges terület"
+    territoryEnemy: "§cEllenséges terület"
+    territoryEnemyWar: "§4Ellenséges terület (HÁBORÚ)"

@@ -1,0 +1,69 @@
+messages:
+  playersOnly: "§cSeuls les joueurs peuvent utiliser cette commande."
+  unknownSubcommand: "§cSous-commande inconnue. Utilisez /f help"
+
+  help:
+    line1: "§6/f help, menu, map, list, info <faction>"
+    line2: "§6/f create, invite, accept, leave, kick, disband"
+    line3: "§6/f claim, unclaim, trust <joueur>, untrust <joueur>"
+    line4: "§6/f war <faction>, ally <faction>, neutral <faction>"
+
+  usage:
+    trust: "§cUtilisation: /f trust <joueur>"
+    untrust: "§cUtilisation: /f untrust <joueur>"
+    create: "§cUtilisation: /f create <nom>"
+    info: "§cUtilisation: /f info <faction>"
+
+  faction:
+    ownerOnly: "§cSeul le propriétaire peut faire ça."
+    playerNotFound: "§cJoueur introuvable."
+    alreadyInFaction: "§cVous êtes déjà dans une faction."
+    alreadyExists: "§cCette faction existe déjà."
+    created: "§aFaction {faction} créée !"
+    trusted: "§aJoueur de confiance ajouté : {player}"
+    trustRemoved: "§eConfiance retirée : {player}"
+    invited: "§eVous avez été invité dans la faction §a{faction}§e. /f accept"
+    inviteSent: "§aInvitation envoyée."
+    joined: "§aVous avez rejoint {faction}"
+    left: "§aVous avez quitté la faction."
+    kicked: "§aJoueur expulsé."
+    disbandedBroadcast: "§cFaction dissoute : §4{faction}"
+
+  claims:
+    tooCloseToSpawn: "§cTrop proche du spawn."
+    claimed: "§aTerritoire revendiqué."
+    unclaimed: "§aTerritoire libéré."
+    noFactions: "§7Aucune faction."
+
+  relations:
+    warDeclared: "§cVous avez déclaré la guerre à la faction {faction}."
+    allianceFormed: "§aAlliance formée avec {faction}"
+    setNeutral: "§eRelation avec {faction} définie sur neutre"
+
+  list:
+    header: "§6Factions : §f{factions}"
+
+  info:
+    notFound: "§cIntrouvable."
+    summary: "§6{faction} §7Membres : §f{members} §7Confiance : §f{trusted} §7Territoires : §f{claims}"
+
+  map:
+    title: "§6=== Carte des factions ==="
+    legend: "§7■ Nature  §a■ La vôtre  §b■ Allié §c■ Autre §4■ Guerre §e✦ Vous"
+
+  menu:
+    mainTitle: "Menu SimpleFactions"
+    inviteTitle: "Choisir un joueur à inviter"
+    trustTitle: "Choisir un joueur de confiance"
+    warTitle: "Choisir une cible de guerre"
+    factionListItem: "§bListe des factions"
+    factionListLore: "§7Voir toutes les factions"
+
+  actionbar:
+    deny: "§cVous ne pouvez pas faire ça sur le territoire de §f{faction}§c."
+    war: "§6GUERRE : §eLe grief est autorisé ici (guerre active contre {faction})."
+    territoryWilderness: "§7Nature"
+    territoryOwn: "§aVotre territoire"
+    territoryAlly: "§bTerritoire allié"
+    territoryEnemy: "§cTerritoire ennemi"
+    territoryEnemyWar: "§4Territoire ennemi (GUERRE)"
