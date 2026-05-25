@@ -69,11 +69,11 @@ public class ClaimProtectionListener implements Listener {
 
         // Otherwise: deny
         event.setCancelled(true);
+        String deny = plugin.getMessagesConfig().getString("messages.actionbar.deny", "&cYou cannot do that in &f{faction}&c territory.");
+        deny = ChatColor.translateAlternateColorCodes('&', deny).replace("{faction}", owningFaction);
         player.spigot().sendMessage(
                 ChatMessageType.ACTION_BAR,
-                TextComponent.fromLegacyText(
-                        ChatColor.RED + "You are in " + owningFaction + " territory"
-                )
+                TextComponent.fromLegacyText(deny)
         );
     }
 

@@ -1,3 +1,5 @@
+language: "en"  # en, hu, ru, es, de, fr, eo
+
 # How many chunks each faction member adds to the claim limit
 chunksPerMember: 10
 

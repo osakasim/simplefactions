@@ -36,21 +36,25 @@ public class ClaimBorderListener implements Listener {
 
         String msg;
         if (owner == null) {
-            msg = ChatColor.GRAY + "Wilderness";
+            msg = color(plugin.getMessagesConfig().getString("messages.actionbar.territoryWilderness", "&7Wilderness"));
         } else if (owner.equals(playerFaction)) {
-            msg = ChatColor.GREEN + "Your Territory";
+            msg = color(plugin.getMessagesConfig().getString("messages.actionbar.territoryOwn", "&aYour Territory"));
         } else if (playerFaction != null && warManager.isAlly(playerFaction, owner)) {
-            msg = ChatColor.AQUA + "Ally Territory";
+            msg = color(plugin.getMessagesConfig().getString("messages.actionbar.territoryAlly", "&bAlly Territory"));
         } else if (playerFaction != null && warManager.isAtWar(playerFaction, owner)) {
-            msg = ChatColor.DARK_RED + "Enemy Territory (WAR)";
+            msg = color(plugin.getMessagesConfig().getString("messages.actionbar.territoryEnemyWar", "&4Enemy Territory (WAR)"));
         } else {
-            msg = ChatColor.RED + "Enemy Territory";
+            msg = color(plugin.getMessagesConfig().getString("messages.actionbar.territoryEnemy", "&cEnemy Territory"));
         }
 
         player.spigot().sendMessage(
                 ChatMessageType.ACTION_BAR,
                 TextComponent.fromLegacyText(msg)
         );
+    }
+
+    private String color(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     private String getPlayerFaction(Player player, FileConfiguration factions) {

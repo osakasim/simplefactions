@@ -1,0 +1,69 @@
+messages:
+  playersOnly: "§cNur Spieler können diesen Befehl nutzen."
+  unknownSubcommand: "§cUnbekannter Unterbefehl. Nutze /f help"
+
+  help:
+    line1: "§6/f help, menu, map, list, info <fraktion>"
+    line2: "§6/f create, invite, accept, leave, kick, disband"
+    line3: "§6/f claim, unclaim, trust <spieler>, untrust <spieler>"
+    line4: "§6/f war <fraktion>, ally <fraktion>, neutral <fraktion>"
+
+  usage:
+    trust: "§cBenutzung: /f trust <spieler>"
+    untrust: "§cBenutzung: /f untrust <spieler>"
+    create: "§cBenutzung: /f create <name>"
+    info: "§cBenutzung: /f info <fraktion>"
+
+  faction:
+    ownerOnly: "§cNur der Besitzer kann das tun."
+    playerNotFound: "§cSpieler nicht gefunden."
+    alreadyInFaction: "§cDu bist bereits in einer Fraktion."
+    alreadyExists: "§cDiese Fraktion existiert bereits."
+    created: "§aFraktion {faction} erstellt!"
+    trusted: "§aVertrauen gegeben: {player}"
+    trustRemoved: "§eVertrauen entfernt: {player}"
+    invited: "§eDu wurdest in die Fraktion §a{faction}§e eingeladen. /f accept"
+    inviteSent: "§aEinladung gesendet."
+    joined: "§aDu bist {faction} beigetreten"
+    left: "§aDu hast die Fraktion verlassen."
+    kicked: "§aSpieler entfernt."
+    disbandedBroadcast: "§cFraktion aufgelöst: §4{faction}"
+
+  claims:
+    tooCloseToSpawn: "§cZu nah am Spawn."
+    claimed: "§aGebiet beansprucht."
+    unclaimed: "§aGebiet freigegeben."
+    noFactions: "§7Keine Fraktionen vorhanden."
+
+  relations:
+    warDeclared: "§cDu hast der Fraktion {faction} den Krieg erklärt."
+    allianceFormed: "§aAllianz mit {faction} gebildet"
+    setNeutral: "§eBeziehung zu {faction} auf neutral gesetzt"
+
+  list:
+    header: "§6Fraktionen: §f{factions}"
+
+  info:
+    notFound: "§cNicht gefunden."
+    summary: "§6{faction} §7Mitglieder: §f{members} §7Vertrauen: §f{trusted} §7Claims: §f{claims}"
+
+  map:
+    title: "§6=== Fraktionskarte ==="
+    legend: "§7■ Wildnis  §a■ Deine  §b■ Verbündet §c■ Andere §4■ Krieg §e✦ Du"
+
+  menu:
+    mainTitle: "SimpleFactions Menü"
+    inviteTitle: "Spieler zum Einladen wählen"
+    trustTitle: "Vertrauenden Spieler wählen"
+    warTitle: "Kriegsziel wählen"
+    factionListItem: "§bFraktionsliste"
+    factionListLore: "§7Alle Fraktionen anzeigen"
+
+  actionbar:
+    deny: "§cDas kannst du im Gebiet von §f{faction}§c nicht tun."
+    war: "§6KRIEG: §eGriefing ist hier erlaubt (aktiver Krieg gegen {faction})."
+    territoryWilderness: "§7Wildnis"
+    territoryOwn: "§aDein Gebiet"
+    territoryAlly: "§bGebiet von Verbündeten"
+    territoryEnemy: "§cFeindliches Gebiet"
+    territoryEnemyWar: "§4Feindliches Gebiet (KRIEG)"

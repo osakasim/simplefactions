@@ -1,0 +1,9 @@
+messages:
+  actionbar:
+    deny: "&cYou cannot do that in &f{faction}&c territory."
+    war: "&6WAR: &eGrief allowed here (war active vs {faction})."
+    territoryWilderness: "&7Wilderness"
+    territoryOwn: "&aYour Territory"
+    territoryAlly: "&bAlly Territory"
+    territoryEnemy: "&cEnemy Territory"
+    territoryEnemyWar: "&4Enemy Territory (WAR)"
